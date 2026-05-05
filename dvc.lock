@@ -1,0 +1,155 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python -m src.data.make_dataset
+    deps:
+    - path: params.yaml
+      hash: md5
+      md5: 0d81edba9122878f4b556fa7d04692c3
+      size: 855
+    - path: src/data/make_dataset.py
+      hash: md5
+      md5: 088b769f6c246d8b7f894904abde410a
+      size: 10434
+    params:
+      params.yaml:
+        data_ingestion:
+          test_size: 0.2
+          random_state: 42
+          data_url: 
+            https://raw.githubusercontent.com/campusx-official/jupyter-masterclass/main/tweet_emotions.csv
+          target_sentiments:
+          - happiness
+          - sadness
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: 48dea689a9c68a453910c365f9926260.dir
+      size: 827973
+      nfiles: 2
+  data_processing:
+    cmd: python -m src.data.process_data
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 48dea689a9c68a453910c365f9926260.dir
+      size: 827973
+      nfiles: 2
+    - path: params.yaml
+      hash: md5
+      md5: 0d81edba9122878f4b556fa7d04692c3
+      size: 855
+    - path: src/data/process_data.py
+      hash: md5
+      md5: 86479cde64c2d8e6e3a2ab63a62c453f
+      size: 14648
+    params:
+      params.yaml:
+        data_processing:
+          min_sentence_length: 3
+          remove_urls: true
+          remove_numbers: true
+          remove_punctuation: true
+          lemmatization: true
+          remove_stopwords: true
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 666bf1d98e2ee8f9ef7cb2fe6ea0db5e.dir
+      size: 566210
+      nfiles: 2
+  feature_engineering:
+    cmd: python -m src.features.build_features
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: 666bf1d98e2ee8f9ef7cb2fe6ea0db5e.dir
+      size: 566210
+      nfiles: 2
+    - path: params.yaml
+      hash: md5
+      md5: 0d81edba9122878f4b556fa7d04692c3
+      size: 855
+    - path: src/features/build_features.py
+      hash: md5
+      md5: 53ff2acc598d4d2a40b7e13cfb72d4c1
+      size: 14275
+    params:
+      params.yaml:
+        feature_engineering:
+          vectorizer_type: count
+          max_features: 50
+          ngram_range:
+          - 1
+          - 1
+          min_df: 1
+          max_df: 1.0
+    outs:
+    - path: data/features
+      hash: md5
+      md5: ef22b1a8545a2f5d316525923d495f3c.dir
+      size: 1070657
+      nfiles: 3
+  model_building:
+    cmd: python -m src.models.train_model
+    deps:
+    - path: data/features
+      hash: md5
+      md5: ef22b1a8545a2f5d316525923d495f3c.dir
+      size: 1070657
+      nfiles: 3
+    - path: params.yaml
+      hash: md5
+      md5: 0d81edba9122878f4b556fa7d04692c3
+      size: 855
+    - path: src/models/train_model.py
+      hash: md5
+      md5: 9d024749ef4a7eb720c3bf8adb1db8c1
+      size: 10453
+    params:
+      params.yaml:
+        model_building:
+          algorithm: gradient_boosting
+          n_estimators: 50
+          learning_rate: 0.1
+          max_depth: 3
+          random_state: 42
+    outs:
+    - path: model.pkl
+      hash: md5
+      md5: ed578b5df0a409aeea03aaa4c388fe64
+      size: 72265
+  model_evaluation:
+    cmd: python -m src.models.predict_model
+    deps:
+    - path: data/features
+      hash: md5
+      md5: ef22b1a8545a2f5d316525923d495f3c.dir
+      size: 1070657
+      nfiles: 3
+    - path: model.pkl
+      hash: md5
+      md5: ed578b5df0a409aeea03aaa4c388fe64
+      size: 72265
+    - path: params.yaml
+      hash: md5
+      md5: 0d81edba9122878f4b556fa7d04692c3
+      size: 855
+    - path: src/models/predict_model.py
+      hash: md5
+      md5: 877179c1512c0532e9945e2d06ec891e
+      size: 12095
+    params:
+      params.yaml:
+        model_evaluation:
+          metrics:
+          - accuracy
+          - precision
+          - recall
+          - auc
+          average_method: binary
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: 16b30c4493c16c7dc936284d6c5cced4
+      size: 543

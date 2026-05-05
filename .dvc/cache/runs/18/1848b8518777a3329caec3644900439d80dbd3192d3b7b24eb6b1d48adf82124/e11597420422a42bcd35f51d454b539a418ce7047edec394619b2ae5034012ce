@@ -1,0 +1,28 @@
+cmd: python -m src.models.train_model
+deps:
+- path: data/features
+  hash: md5
+  md5: ef22b1a8545a2f5d316525923d495f3c.dir
+  size: 1070657
+  nfiles: 3
+- path: params.yaml
+  hash: md5
+  md5: 0d81edba9122878f4b556fa7d04692c3
+  size: 855
+- path: src/models/train_model.py
+  hash: md5
+  md5: 9d024749ef4a7eb720c3bf8adb1db8c1
+  size: 10453
+params:
+  params.yaml:
+    model_building:
+      algorithm: gradient_boosting
+      n_estimators: 50
+      learning_rate: 0.1
+      max_depth: 3
+      random_state: 42
+outs:
+- path: model.pkl
+  hash: md5
+  md5: ed578b5df0a409aeea03aaa4c388fe64
+  size: 72265

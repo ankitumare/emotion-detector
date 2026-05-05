@@ -1,0 +1,51 @@
+stages:
+  data_ingestion:
+    cmd: python -m src.data.make_dataset
+    deps:
+    - src/data/make_dataset.py
+    - params.yaml
+    params:
+    - data_ingestion
+    outs:
+    - data/raw
+  data_processing:
+    cmd: python -m src.data.process_data
+    deps:
+    - src/data/process_data.py
+    - data/raw
+    - params.yaml
+    params:
+    - data_processing
+    outs:
+    - data/processed
+  feature_engineering:
+    cmd: python -m src.features.build_features
+    deps:
+    - data/processed
+    - src/features/build_features.py
+    - params.yaml
+    params:
+    - feature_engineering
+    outs:
+    - data/features
+  model_building:
+    cmd: python -m src.models.train_model
+    deps:
+    - data/features
+    - src/models/train_model.py
+    - params.yaml
+    params:
+    - model_building
+    outs:
+    - models/model.pkl
+  model_evaluation:
+    cmd: python -m src.models.predict_model
+    deps:
+    - data/features
+    - models/model.pkl
+    - src/models/predict_model.py
+    - params.yaml
+    params:
+    - model_evaluation
+    outs:
+    - reports/metrics.json

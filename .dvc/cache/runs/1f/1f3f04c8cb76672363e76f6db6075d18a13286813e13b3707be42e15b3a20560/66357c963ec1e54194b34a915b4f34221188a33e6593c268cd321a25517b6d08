@@ -1,0 +1,30 @@
+cmd: python -m src.data.process_data
+deps:
+- path: data/raw
+  hash: md5
+  md5: 48dea689a9c68a453910c365f9926260.dir
+  size: 827973
+  nfiles: 2
+- path: params.yaml
+  hash: md5
+  md5: 0d81edba9122878f4b556fa7d04692c3
+  size: 855
+- path: src/data/process_data.py
+  hash: md5
+  md5: 86479cde64c2d8e6e3a2ab63a62c453f
+  size: 14648
+params:
+  params.yaml:
+    data_processing:
+      min_sentence_length: 3
+      remove_urls: true
+      remove_numbers: true
+      remove_punctuation: true
+      lemmatization: true
+      remove_stopwords: true
+outs:
+- path: data/processed
+  hash: md5
+  md5: 666bf1d98e2ee8f9ef7cb2fe6ea0db5e.dir
+  size: 566210
+  nfiles: 2

@@ -1,0 +1,26 @@
+cmd: python -m src.data.make_dataset
+deps:
+- path: params.yaml
+  hash: md5
+  md5: 0d81edba9122878f4b556fa7d04692c3
+  size: 855
+- path: src/data/make_dataset.py
+  hash: md5
+  md5: 088b769f6c246d8b7f894904abde410a
+  size: 10434
+params:
+  params.yaml:
+    data_ingestion:
+      test_size: 0.2
+      random_state: 42
+      data_url: 
+        https://raw.githubusercontent.com/campusx-official/jupyter-masterclass/main/tweet_emotions.csv
+      target_sentiments:
+      - happiness
+      - sadness
+outs:
+- path: data/raw
+  hash: md5
+  md5: 48dea689a9c68a453910c365f9926260.dir
+  size: 827973
+  nfiles: 2

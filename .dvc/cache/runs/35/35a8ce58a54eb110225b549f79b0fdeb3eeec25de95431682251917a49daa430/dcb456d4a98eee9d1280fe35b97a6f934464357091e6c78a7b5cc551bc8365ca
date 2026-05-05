@@ -1,0 +1,31 @@
+cmd: python -m src.features.build_features
+deps:
+- path: data/processed
+  hash: md5
+  md5: 666bf1d98e2ee8f9ef7cb2fe6ea0db5e.dir
+  size: 566210
+  nfiles: 2
+- path: params.yaml
+  hash: md5
+  md5: 0d81edba9122878f4b556fa7d04692c3
+  size: 855
+- path: src/features/build_features.py
+  hash: md5
+  md5: 53ff2acc598d4d2a40b7e13cfb72d4c1
+  size: 14275
+params:
+  params.yaml:
+    feature_engineering:
+      vectorizer_type: count
+      max_features: 50
+      ngram_range:
+      - 1
+      - 1
+      min_df: 1
+      max_df: 1.0
+outs:
+- path: data/features
+  hash: md5
+  md5: ef22b1a8545a2f5d316525923d495f3c.dir
+  size: 1070657
+  nfiles: 3
